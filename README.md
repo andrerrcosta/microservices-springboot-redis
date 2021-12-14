@@ -8,15 +8,17 @@ Perguntas:
 - Está funcionando? Está. Pode ter bugs porque eu não completei os testes.
 abaixo estão as razões.
 
-FALTANDO:
+O QUE ESTÁ FALTANDO:
 
-* Estrutura
+Estrutura:
+
 - Criar excessões customizadas condizentes com os erros (Todos estão retornando BadRequest).
 - Colocar as rotas no Gateway
 - Customizar o LogBack
 - Hierarquizar o POM
 
-* Testes
+Testes
+
 Admin
 - Testar todas as entradas do controller com o TestRestTemplate (integração)
 - Testar todos os métodos do serviço (Unit)
