@@ -1,0 +1,57 @@
+version: '3'
+services:
+  consul-dev:
+    image: consul:1.7.2
+    container_name: consul-dbs
+    ports:
+      - '8500:8500'
+      - '8600:8600/udp'
+    command: 'agent -dev -node=consulnode -client=0.0.0.0 -log-level=INFO'
+    networks:
+      - dbs
+
+  rabbitmq-dev:
+    image: rabbitmq:3-management
+    container_name: rabbit-dbs
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - dbs
+
+  mysql-dev:
+    image: mysql:5.7
+    container_name: mysql-dbs
+    volumes:
+      - $PWD/data:/var/lib/mysql
+    ports:
+      - '3307:3306'
+    restart: unless-stopped
+    networks:
+      - dbs
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_USER: dbsadmin
+      MYSQL_DATABASE: dbs
+      MYSQL_PASSWORD: dbsadmin
+
+
+  redis-dev:
+    image: redis
+    container_name: redis-dbs
+    ports:
+      - '6379:6379'
+    volumes:
+     - $PWD/redis-data:/var/lib/redis
+     - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+
+    environment:
+     - REDIS_REPLICATION_MODE=master
+    networks:
+      - dbs
+
+    
+
+networks:
+  dbs:
+    driver: bridge

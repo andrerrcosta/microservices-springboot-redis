@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: admin
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+      show-sql: false
+      # platform:
+  datasource:
+    url: jdbc:mysql://localhost:3307/dbs
+    username: dbsadmin
+    password: dbsadmin
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+logging:
+  level:
+    org:
+      springframework:
+        ampq:
+          rabbit:
+            core:
+              RabbitAdmin: DEBUG
+
+server:
+  port: 8081
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on-param
+
+amqp:
+  exchange:
+    scheduler: scheduler-agenda
+    admin: admin-agenda
+  queue:
+    admin: admin-queue;
+  routingkey:
+    scheduler: scheduler-key
+    admin: admin-key

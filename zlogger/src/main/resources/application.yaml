@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: LoggerService
+
+server:
+  port: 8580
+
+amqp:
+  queue:
+    logs: logger-queue
+  exchange:
+    logs: logger-exchange
