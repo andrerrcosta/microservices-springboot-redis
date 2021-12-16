@@ -12,11 +12,11 @@ public abstract class ModelMapper<T, U> {
     this.fromEntity = fromEntity;
   }
 
-  public final U convertFromRedisToEntity(final T redis) {
+  public final U convertFromEntityToDTO(final T redis) {
     return fromRedis.apply(redis);
   }
 
-  public final T convertFromEntityToRedis(final U entity) {
+  public final T convertFromDTOToEntity(final U entity) {
     return fromEntity.apply(entity);
   }
 }

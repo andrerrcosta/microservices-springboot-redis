@@ -7,9 +7,11 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.With;
 
 @Data
 @Builder
+@With
 public class Vote {
   
   @NotNull

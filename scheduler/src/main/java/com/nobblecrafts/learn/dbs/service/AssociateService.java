@@ -34,8 +34,10 @@ public class AssociateService implements VotationService {
 
     if (now < start)
       throw new BadRequestException("Essa agenda não está aberta");
+
     if (now > end)
       throw new BadRequestException("Essa agenda já está fechada");
+      
     var redisVote = RedisVoteBuilder.buildRedisVote(vote.getVote(), vote.getAssociateId(), agenda)
       .orElseThrow(() -> new InternalError("Algum erro aconteceu tentando salvar o voto"));
 

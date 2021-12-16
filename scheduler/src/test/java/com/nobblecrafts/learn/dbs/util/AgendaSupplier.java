@@ -33,12 +33,24 @@ public class AgendaSupplier {
     return null;
   }
 
-  public List<Vote> createRandomVotes(List<Long> associates, Long agendaId) {
+  public List<Vote> createRandomValidVotes(List<Long> associates, Long agendaId) {
     var voto = faker.random().nextBoolean();
     return associates.stream()
         .map(id -> Vote.builder()
             .agendaId(agendaId)
             .associateId(id)
+            .associateCpf(cpfGenerator.cpf(false))
+            .vote(voto ? "sim" : "não")
+            .build())
+        .collect(Collectors.toList());
+  }
+
+  public List<Vote> createRandomInvalidVotes(List<Long> associates, Long agendaId) {
+    var voto = faker.random().nextBoolean();
+    return associates.stream()
+        .map(id -> Vote.builder()
+            .agendaId(agendaId)
+            // .associateId(id)
             .associateCpf(cpfGenerator.cpf(false))
             .vote(voto ? "sim" : "não")
             .build())

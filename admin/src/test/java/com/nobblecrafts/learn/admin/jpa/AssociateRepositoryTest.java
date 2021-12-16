@@ -57,6 +57,7 @@ public class AssociateRepositoryTest {
     Assertions.assertThat(found).isEmpty();
   }
 
+  
   @Test
   public void saveThrowsConstraintViolationException() {
     var associate = new ArrayList<>(supplier.createSetOfAssociates(1)).get(0);
