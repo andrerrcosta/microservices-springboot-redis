@@ -32,7 +32,7 @@ public class AgendaPublisher {
   public void publishAgenda(final RedisAgenda agenda) {
     log.info("Trying to publish {}", agenda);
     try {
-      amqpTemplate.convertAndSend(exchangeName, routingKey, mapper.convertFromRedisToEntity(agenda));
+      amqpTemplate.convertAndSend(exchangeName, routingKey, mapper.convertFromEntityToDTO(agenda));
       log.info("ANALYTICS-PUBLISHER: message sent");
       log.info("\nexchangeName: {}\nroutingKey: {}\nmessage: {}", exchangeName, routingKey,
           agenda);

@@ -69,7 +69,7 @@ public class SchedulerService {
     var end = (agenda.getEnd() == null || agenda.getEnd().getTime() < agenda.getStart().getTime())
         ? new Date(agenda.getStart().getTime() + 60000)
         : agenda.getEnd();
-    var redisAgenda = mapper.convertFromEntityToRedis(agenda);
+    var redisAgenda = mapper.convertFromDTOToEntity(agenda);
 
     if (agenda.getStart().getTime() > now) {
       scheduler.schedule(new OpenVoting(redisAgenda, agendaRepository), start);

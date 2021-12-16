@@ -13,6 +13,9 @@ import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Eu modifiquei algumas coisas e tenho que consertar essa classe
+ */
 @SpringBootTest
 @Slf4j
 public class SchedulerServiceTest {
@@ -39,7 +42,7 @@ public class SchedulerServiceTest {
       e.printStackTrace();
     }
     
-    var votes = supplier.createRandomVotes(agenda.getAssociates(), agenda.getId());
+    var votes = supplier.createRandomValidVotes(agenda.getAssociates(), agenda.getId());
     log.info("VOTES SUPPLIED {}", votes);
 
     votes.forEach(vote -> template.postForEntity("http://localhost:8082/client/vote", vote, Vote.class));

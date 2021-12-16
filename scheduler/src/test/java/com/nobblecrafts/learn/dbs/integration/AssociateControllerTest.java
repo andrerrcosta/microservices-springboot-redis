@@ -19,6 +19,9 @@ import org.springframework.http.HttpStatus;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Eu modifiquei algumas coisas e tenho que consertar essa classe
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
 public class AssociateControllerTest {
@@ -37,14 +40,14 @@ public class AssociateControllerTest {
 
   // @Test
   public void voteOnce() {
-    var vote = supplier.createRandomVotes(agenda.getAssociates(), agenda.getId()).get(0);
+    var vote = supplier.createRandomValidVotes(agenda.getAssociates(), agenda.getId()).get(0);
     var response = template.exchange("/client/vote", HttpMethod.POST, new HttpEntity<>(vote), Vote.class);
     Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
   }
 
   // @Test
   public void voteMany() {
-    var votes = supplier.createRandomVotes(agenda.getAssociates(), agenda.getId());
+    var votes = supplier.createRandomValidVotes(agenda.getAssociates(), agenda.getId());
     var responses = votes.stream()
         .map(v -> template.exchange("/client/vote", HttpMethod.POST, new HttpEntity<>(v), Vote.class))
         .collect(Collectors.toList());
