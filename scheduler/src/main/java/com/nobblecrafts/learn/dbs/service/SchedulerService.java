@@ -10,6 +10,7 @@ import com.nobblecrafts.learn.dbs.task.OpenVoting;
 import com.nobblecrafts.learn.dbs.util.AgendaMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SchedulerService {
 
+  private final Long delay;
   private final RedisAgendaRepository agendaRepository;
   private final RedisVoteRepository voteRepository;
   private final AgendaMapper mapper;
@@ -28,12 +30,13 @@ public class SchedulerService {
 
   @Autowired
   public SchedulerService(RedisAgendaRepository agendaRepository, RedisVoteRepository voteRepository,
-      ThreadPoolTaskScheduler scheduler, AgendaPublisher publisher) {
+      ThreadPoolTaskScheduler scheduler, AgendaPublisher publisher, @Value("${config.scheduler.delay}") Long delay) {
     this.mapper = new AgendaMapper();
     this.agendaRepository = agendaRepository;
     this.voteRepository = voteRepository;
     this.scheduler = scheduler;
     this.publisher = publisher;
+    this.delay = delay;
   }
 
   /**
@@ -64,8 +67,9 @@ public class SchedulerService {
    * @param agenda
    */
   public void schedule(AgendaDTO agenda) {
+    log.info("\nAgendando agenda {} com delay de {}ms\n", agenda, delay);
     var now = new Date().getTime();
-    var start = new Date(agenda.getStart().getTime() - 60000);
+    var start = new Date(agenda.getStart().getTime() + delay);
     var end = (agenda.getEnd() == null || agenda.getEnd().getTime() < agenda.getStart().getTime())
         ? new Date(agenda.getStart().getTime() + 60000)
         : agenda.getEnd();
@@ -74,10 +78,7 @@ public class SchedulerService {
     if (agenda.getStart().getTime() > now) {
       scheduler.schedule(new OpenVoting(redisAgenda, agendaRepository), start);
       scheduler.schedule(new CloseVoting(redisAgenda, voteRepository, agendaRepository, publisher), end);
-    } else {
-      log.info("Now is {}\nStart is {}\n", now, start);
     }
-
   }
 
 }

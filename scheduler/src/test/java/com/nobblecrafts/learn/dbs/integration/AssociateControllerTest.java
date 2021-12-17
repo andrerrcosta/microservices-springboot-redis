@@ -38,16 +38,19 @@ public class AssociateControllerTest {
     createAgenda();
   }
 
-  // @Test
-  public void voteOnce() {
+  @Test
+  public void voteOnce() throws InterruptedException {
     var vote = supplier.createRandomValidVotes(agenda.getAssociates(), agenda.getId()).get(0);
+    Thread.sleep(1200);
     var response = template.exchange("/client/vote", HttpMethod.POST, new HttpEntity<>(vote), Vote.class);
+    log.info("\nResponse -> {}", response.getStatusCode());
     Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
   }
 
-  // @Test
-  public void voteMany() {
+  @Test
+  public void voteMany() throws InterruptedException {
     var votes = supplier.createRandomValidVotes(agenda.getAssociates(), agenda.getId());
+    Thread.sleep(1200);
     var responses = votes.stream()
         .map(v -> template.exchange("/client/vote", HttpMethod.POST, new HttpEntity<>(v), Vote.class))
         .collect(Collectors.toList());
@@ -55,8 +58,7 @@ public class AssociateControllerTest {
   }
 
   private void createAgenda() {
-    agenda = supplier.createAgenda(1L, 0L);
+    agenda = supplier.createAgenda(1L, 1000L);
     scheduler.schedule(agenda);
   }
-
 }

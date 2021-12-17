@@ -50,3 +50,7 @@ management:
     web:
       exposure:
         include: health, info, beans, conditions, scheduledtasks
+
+config:
+  scheduler:
+    delay: -60000

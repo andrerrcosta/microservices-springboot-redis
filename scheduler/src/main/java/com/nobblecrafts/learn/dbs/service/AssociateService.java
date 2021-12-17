@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AssociateService implements VotationService {
 
   private final RedisVoteRepository repository;
@@ -25,28 +27,29 @@ public class AssociateService implements VotationService {
   public RedisVote vote(Vote vote) {
     var now = System.currentTimeMillis();
 
+    log.info("\n\n\nAll Agendas: {}\n\n\n", agendaRepository.findAll());
+
     var agenda = agendaRepository.findById(vote.getAgendaId())
         .orElseThrow(() -> new BadRequestException("Agenda não encontrada"));
 
     var start = agenda.getStart().getTime();
     var end = agenda.getEnd().getTime();
 
-
     if (now < start)
       throw new BadRequestException("Essa agenda não está aberta");
 
     if (now > end)
       throw new BadRequestException("Essa agenda já está fechada");
-      
+
     var redisVote = RedisVoteBuilder.buildRedisVote(vote.getVote(), vote.getAssociateId(), agenda)
-      .orElseThrow(() -> new InternalError("Algum erro aconteceu tentando salvar o voto"));
+        .orElseThrow(() -> new InternalError("Algum erro aconteceu tentando salvar o voto"));
 
-
-    // var info = restTemplate.getForObject(userInfoUrl + vote.getAssociateCpf(), UserInfoDTO.class);
+    // var info = restTemplate.getForObject(userInfoUrl + vote.getAssociateCpf(),
+    // UserInfoDTO.class);
     // log.info("after info");
     // if (info.getStatus().equalsIgnoreCase("UNABLE_TO_VOTE"))
-    //   throw new BadRequestException("Este CPF não está apto para votar");
-    
+    // throw new BadRequestException("Este CPF não está apto para votar");
+
     return repository.save(redisVote);
   }
 

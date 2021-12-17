@@ -1,7 +1,6 @@
 package com.nobblecrafts.learn.dbs.service;
 
-import com.nobblecrafts.learn.dbs.domain.RedisAgenda;
-import com.nobblecrafts.learn.dbs.util.AgendaMapper;
+import com.nobblecrafts.learn.dbs.domain.AgendaDTO;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ public class AgendaPublisher {
   private final AmqpTemplate amqpTemplate;
   private final String exchangeName;
   private final String routingKey;
-  private final AgendaMapper mapper;
 
   @Autowired
   public AgendaPublisher(final AmqpTemplate amqpTemplate,
@@ -26,13 +24,12 @@ public class AgendaPublisher {
     this.amqpTemplate = amqpTemplate;
     this.exchangeName = exchangeName;
     this.routingKey = routingKey;
-    this.mapper = new AgendaMapper();
   }
 
-  public void publishAgenda(final RedisAgenda agenda) {
+  public void publishAgenda(final AgendaDTO agenda) {
     log.info("Trying to publish {}", agenda);
     try {
-      amqpTemplate.convertAndSend(exchangeName, routingKey, mapper.convertFromEntityToDTO(agenda));
+      amqpTemplate.convertAndSend(exchangeName, routingKey, agenda);
       log.info("ANALYTICS-PUBLISHER: message sent");
       log.info("\nexchangeName: {}\nroutingKey: {}\nmessage: {}", exchangeName, routingKey,
           agenda);

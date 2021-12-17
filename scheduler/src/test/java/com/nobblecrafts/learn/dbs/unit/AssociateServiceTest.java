@@ -21,12 +21,12 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import lombok.extern.slf4j.Slf4j;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 @Slf4j
 public class AssociateServiceTest {
 
@@ -79,8 +79,8 @@ public class AssociateServiceTest {
     BDDMockito.when(agendaRepository.findById(ArgumentMatchers.any()))
         .thenReturn(Optional.of(agendaMapper.convertFromDTOToEntity(agenda)));
 
-    BDDMockito.when(voteRepository.save(ArgumentMatchers.any()))
-        .thenReturn(voteMapper.convertFromDTOToEntity(invalidVote).withId("1"));
+    // BDDMockito.when(voteRepository.save(ArgumentMatchers.any()))
+    //     .thenReturn(voteMapper.convertFromDTOToEntity(invalidVote).withId("1"));
 
     log.info("\n\n\ninvalidVote is {}\n\n\n", invalidVote);
     Assertions.assertThatExceptionOfType(InternalError.class)
