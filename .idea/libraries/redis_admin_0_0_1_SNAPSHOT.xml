@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="redis-admin-0.0.1-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/redis-admin/target/redis-admin-0.0.1-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
