@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 public class AgendaEventHandler implements EventHandler<AgendaDTO> {
 
     private final VoteScheduler service;
-
     @Override
     @RabbitListener(queues = "${amqp.queue.scheduler}")
     public void handle(final AgendaDTO dto) {
