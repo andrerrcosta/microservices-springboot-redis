@@ -6,11 +6,16 @@ import com.nobblecrafts.learn.redis.dbs.util.AgendaSupplier;
 
 import com.nobblecrafts.learn.redis.dbs.util.RedisVoteBuilder;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
@@ -19,6 +24,9 @@ import javax.transaction.Transactional;
  * repositório. Isso tem que olhar
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@RunWith(SpringRunner.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@ActiveProfiles("test")
 @Slf4j
 public class RedisAgendaRepositoryTest {
 

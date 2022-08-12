@@ -4,6 +4,7 @@ import com.nobblecrafts.learn.redis.admin.domain.AgendaDTO;
 import com.nobblecrafts.learn.redis.admin.domain.AssociateDTO;
 import com.nobblecrafts.learn.redis.admin.service.AdminService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +16,14 @@ import java.util.List;
 @RestController
 @RequestMapping("admin")
 @RequiredArgsConstructor
+@Slf4j
 public class AdminController {
 
     private final AdminService service;
 
     @PostMapping("criarpauta")
     public ResponseEntity<AgendaDTO> createAgenda(@RequestBody @Valid AgendaDTO agenda) {
+        log.info("\n\nCriando Pauta: {}\n\n", agenda);
         var output = service.createNewAgenda(agenda);
         return new ResponseEntity<>(output, HttpStatus.OK);
     }

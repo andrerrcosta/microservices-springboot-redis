@@ -17,7 +17,7 @@ public class AgendaEventHandler implements EventHandler<AgendaDTO> {
     private final SystemServiceImpl service;
 
     @Override
-    @RabbitListener(queues = "${amqp.queue.admin}")
+    @RabbitListener(queues = "${amqp-config.admin-queue}")
     public void handle(final AgendaDTO dto) {
         log.info("Scheduler Event Received {}", dto);
         try {

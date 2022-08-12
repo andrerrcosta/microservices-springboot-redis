@@ -1,61 +1,54 @@
 package com.nobblecrafts.learn.redis.admin.config;
 
-import java.time.Duration;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.ExchangeBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.QueueBuilder;
-import org.springframework.amqp.core.TopicExchange;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 import org.springframework.messaging.handler.annotation.support.MessageHandlerMethodFactory;
 
-import lombok.extern.slf4j.Slf4j;
+import java.time.Duration;
 
 @Slf4j
 @Configuration
+@RequiredArgsConstructor
 public class AMQPConfiguration {
 
+    private final AMQPConfigData config;
+
     @Bean(name = "schedulerExchange")
-    public TopicExchange schedulerTopicExchange(@Value("${amqp.exchange.scheduler}") final String exchangeName) {
-        log.info("Scheduler Exchange created: " + exchangeName);
-        return ExchangeBuilder.topicExchange(exchangeName).durable(true).build();
+    public TopicExchange schedulerTopicExchange() {
+        log.info("Scheduler Exchange created: " + config.getSchedulerExchange());
+        return ExchangeBuilder.topicExchange(config.getSchedulerExchange()).durable(true).build();
     }
 
     @Bean(name = "adminExchange")
-    public TopicExchange adminTopicExchange(@Value("${amqp.exchange.admin}") final String exchangeName) {
-        log.info("Admin Exchange created: " + exchangeName);
-        return ExchangeBuilder.topicExchange(exchangeName).durable(true).build();
+    public TopicExchange adminTopicExchange() {
+        log.info("Admin Exchange created: " + config.getAdminExchange());
+        return ExchangeBuilder.topicExchange(config.getAdminExchange()).durable(true).build();
     }
 
     @Bean
-    public Queue agendaQueue(@Value("${amqp.queue.admin}") final String queueName) {
-        return QueueBuilder.durable(queueName).ttl((int) Duration.ofHours(1).toMillis()).maxLength(25000).build();
+    public Queue agendaQueue() {
+        return QueueBuilder.durable(config.getAdminQueue()).ttl((int) Duration.ofHours(1).toMillis()).maxLength(25000).build();
     }
 
     /**
      * Sem o binder você não irá conseguir associar a fila ao exchange
-     * 
-     * @param panelQueue
-     * @param exchangeName
-     * @param routingKey
-     * @return
      */
     @Bean
-    public Binding handleAnalyticsReport(final Queue panelQueue, @Qualifier("adminExchange") final TopicExchange exchangeName,
-            @Value("${amqp.routingkey.admin}") final String routingKey) {
-        return BindingBuilder.bind(panelQueue).to(exchangeName).with(routingKey);
+    public Binding handleAnalyticsReport(final Queue panelQueue, @Qualifier("adminExchange") final TopicExchange topicExchange) {
+        return BindingBuilder
+                .bind(panelQueue)
+                .to(topicExchange)
+                .with(config.getAdminRoutingKey());
     }
 
     @Bean
@@ -69,7 +62,6 @@ public class AMQPConfiguration {
         DefaultMessageHandlerMethodFactory factory = new DefaultMessageHandlerMethodFactory();
         final MappingJackson2MessageConverter jsonConverter = new MappingJackson2MessageConverter();
         jsonConverter.getObjectMapper().registerModule(new ParameterNamesModule(JsonCreator.Mode.PROPERTIES));
-
         factory.setMessageConverter(jsonConverter);
         return factory;
     }

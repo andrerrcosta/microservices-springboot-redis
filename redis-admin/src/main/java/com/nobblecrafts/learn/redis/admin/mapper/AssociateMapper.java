@@ -8,11 +8,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = MapperUtils.class)
+@Mapper(componentModel = "default", uses = MapperUtils.class)
 public abstract class AssociateMapper {
 
     public static final AssociateMapper INSTANCE = Mappers.getMapper(AssociateMapper.class);

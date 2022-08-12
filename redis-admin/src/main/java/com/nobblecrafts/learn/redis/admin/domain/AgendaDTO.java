@@ -2,11 +2,10 @@ package com.nobblecrafts.learn.redis.admin.domain;
 
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,14 +13,22 @@ import java.util.Set;
 @With
 @Getter
 @Setter
+@ToString
 public class AgendaDTO implements Serializable {
 
-    String subject;
-    String title;
+    @Serial
+    private static final long serialVersionUID = -79503534916015371L;
     Long id;
-    Date start;
-    Date end;
-    Set<Long> associates;
-    Map<Long, String> votes;
+    @NotNull
+    String subject;
+    @NotNull
+    String title;
+    @NotNull
+    Date startVotation;
+    Date endVotation;
+    @Builder.Default
+    Set<Long> associates = new HashSet<>();
+    @Builder.Default
+    Map<Long, String> votes = new HashMap<>();
 
 }

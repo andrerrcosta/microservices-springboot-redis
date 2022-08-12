@@ -25,8 +25,8 @@ public class AgendaSupplier {
       .associates(this.createSetOfAssociates(20))
       .subject(faker.funnyName().name())
       .title(faker.funnyName().name())
-      .start(new Date())
-      .end(end)
+      .startVotation(new Date())
+      .endVotation(end)
       .build();
   }
 
@@ -35,8 +35,8 @@ public class AgendaSupplier {
     return Agenda.builder()
       .subject(faker.funnyName().name())
       .title(faker.funnyName().name())
-      .start(new Date())
-      .end(end)
+      .startVotation(new Date())
+      .endVotation(end)
       .build();
   }
 
@@ -59,8 +59,8 @@ public class AgendaSupplier {
             .associates(this.createSetOfAssociatesDTO(20).stream().map(AssociateDTO::getId).collect(Collectors.toSet()))
             .subject(faker.funnyName().name())
             .title(faker.funnyName().name())
-            .start(new Date())
-            .end(end)
+            .startVotation(new Date())
+            .endVotation(end)
             .build();
   }
 
@@ -69,8 +69,8 @@ public class AgendaSupplier {
     return AgendaDTO.builder()
             .subject(faker.funnyName().name())
             .title(faker.funnyName().name())
-            .start(new Date())
-            .end(end)
+            .startVotation(new Date())
+            .endVotation(end)
             .build();
   }
 

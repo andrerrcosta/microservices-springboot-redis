@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.Collection;
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = MapperUtils.class)
+@Mapper(componentModel = "default", uses = MapperUtils.class)
 public abstract class AgendaMapper {
 
     public static final AgendaMapper INSTANCE = Mappers.getMapper(AgendaMapper.class);

@@ -1,5 +1,6 @@
 package com.nobblecrafts.learn.redis.admin.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -12,10 +13,13 @@ import java.util.Set;
 @Setter
 @Builder
 @Entity
-@Table(name = "associates")
+@Table(name = "associates", indexes = {
+        @Index(name = "act_cpf_index", columnList = "cpf", unique = true)
+})
 @NoArgsConstructor
 @AllArgsConstructor
 @With
+@ToString
 public class Associate {
 
     @Id
@@ -25,11 +29,13 @@ public class Associate {
     String name;
 
     @Builder.Default
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "associates")
+    @JsonBackReference(value = "agenda-associate")
+    @ToString.Exclude
     Set<Agenda> agendas = new HashSet<>();
 
     @CPF
-    @Column(name = "cpf", nullable = false)
+    @Column(name = "cpf", nullable = false, unique = true)
     String cpf;
 
     @Override

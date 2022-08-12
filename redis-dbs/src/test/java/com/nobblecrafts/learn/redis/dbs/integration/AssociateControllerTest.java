@@ -1,12 +1,10 @@
 package com.nobblecrafts.learn.redis.dbs.integration;
 
-import java.util.stream.Collectors;
-
 import com.nobblecrafts.learn.redis.dbs.domain.AgendaDTO;
 import com.nobblecrafts.learn.redis.dbs.domain.Vote;
 import com.nobblecrafts.learn.redis.dbs.scheduler.VoteScheduler;
 import com.nobblecrafts.learn.redis.dbs.util.AgendaSupplier;
-
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -18,10 +16,10 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.stream.Collectors;
 
 /**
  * Eu modifiquei algumas coisas e tenho que consertar essa classe
@@ -29,6 +27,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@ActiveProfiles("test")
 @Slf4j
 public class AssociateControllerTest {
 

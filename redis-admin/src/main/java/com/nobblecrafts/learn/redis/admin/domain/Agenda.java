@@ -1,5 +1,7 @@
 package com.nobblecrafts.learn.redis.admin.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,9 +12,10 @@ import java.util.*;
 @Setter
 @Builder
 @With
-@Table(name = "Agenda")
+@Table(name = "agendas")
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Agenda {
 
     @Id
@@ -22,13 +25,14 @@ public class Agenda {
     private String subject;
     private String title;
 
-    @Column(name = "start", nullable = false)
-    private Date start;
+    @Column(name = "start_votation", nullable = false)
+    private Date startVotation;
 
-    private Date end;
+    private Date endVotation;
 
     @Builder.Default
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "agenda-associate")
     @JoinTable(
             name = "agenda_associate",
             joinColumns = {@JoinColumn(name = "agenda_id")},
@@ -39,7 +43,10 @@ public class Agenda {
 
     @Builder.Default
     @ElementCollection
-    private Map<Long, String> votes = new HashMap<>();
+    @CollectionTable(name = "agenda_votes")
+    @MapKeyJoinColumn(name = "associate_id")
+    @Column(name = "vote")
+    private Map<Associate, String> votes = new HashMap<>();
 
     @Builder.Default
     private Boolean isClosed = false;

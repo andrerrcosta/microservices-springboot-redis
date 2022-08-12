@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
-public class AssociateControllerTest {
+class AssociateControllerUnitTest {
 
   @InjectMocks
   private AssociateController controller;
@@ -32,7 +32,7 @@ public class AssociateControllerTest {
   private Vote invalidVote;
 
   @Test
-  public void testValidVote() {
+  void testValidVote() {
     validVote = supplier.createRandomValidVotes(Set.of(1L), 1L).stream().findFirst().get();
     log.info("\n\n\nvalidVote is {}\n\n\n", validVote);
     var res = this.controller.vote(validVote);
@@ -46,7 +46,7 @@ public class AssociateControllerTest {
    * precisa do contexto para validar a entrada.
    */
   @Test
-  public void testInvalidVote() {
+  void testInvalidVote() {
     invalidVote = supplier.createRandomInvalidVotes(List.of(1L), 1L).get(0);
     log.info("\n\n\ninvalidVote is {}\n\n\n", invalidVote);
     var res = this.controller.vote(invalidVote);

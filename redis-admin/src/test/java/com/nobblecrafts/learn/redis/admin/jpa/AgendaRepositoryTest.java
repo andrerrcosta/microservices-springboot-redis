@@ -8,16 +8,24 @@ import com.nobblecrafts.learn.redis.admin.repository.AgendaRepository;
 import com.nobblecrafts.learn.redis.admin.util.AgendaSupplier;
 
 import org.assertj.core.api.Assertions;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@RunWith(SpringRunner.class)
 @DataJpaTest
 @DisplayName("testando AgendaRepository")
+@ActiveProfiles("test")
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Slf4j
 public class AgendaRepositoryTest {
@@ -27,7 +35,7 @@ public class AgendaRepositoryTest {
   private AgendaSupplier supplier = new AgendaSupplier();
 
   @Test
-  public void successfulAgendaSave() {
+  public void A1_successfulAgendaSave() {
 
     Agenda agenda = supplier.createAgendaWithoutAssociates(null);
 
@@ -38,7 +46,7 @@ public class AgendaRepositoryTest {
   }
 
   @Test
-  public void successfulAgendaUpdade() {
+  public void A2_successfulAgendaUpdade() {
     Agenda agenda = supplier.createAgendaWithoutAssociates(null);
 
     var saved = repository.save(agenda);
@@ -49,7 +57,7 @@ public class AgendaRepositoryTest {
   }
 
   @Test
-  public void AgendaNotFoundByTitle() {
+  public void A3_AgendaNotFoundByTitle() {
     Agenda a1 = supplier.createAgendaWithoutAssociates(null);
     Agenda a2 = supplier.createAgendaWithoutAssociates(null);
     Agenda a3 = supplier.createAgendaWithoutAssociates(null);

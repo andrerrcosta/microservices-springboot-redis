@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.nobblecrafts.learn.redis.dbs.domain.AgendaDTO;
 import com.nobblecrafts.learn.redis.dbs.domain.Vote;
@@ -31,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
-public class AssociateServiceTest {
+class AssociateServiceUnitTest {
 
   @InjectMocks
   private AssociateService service;
@@ -51,7 +50,7 @@ public class AssociateServiceTest {
   private Vote invalidVote;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     agenda = supplier.createAgenda(1L, 0L);
     agenda.setEnd(new Date(agenda.getStart().getTime() + 60000));
     validVote = supplier.createRandomValidVotes(Set.of(agenda.
@@ -62,7 +61,7 @@ public class AssociateServiceTest {
   }
 
   @Test
-  public void testValidVote() {
+  void testValidVote() {
 
     BDDMockito.when(agendaRepository.findById(ArgumentMatchers.any()))
         .thenReturn(Optional.of(agendaMapper.toRedisAgenda(agenda)));
@@ -82,7 +81,7 @@ public class AssociateServiceTest {
    * do controller.
    */
   @Test
-  public void testInvalidVote() {
+  void testInvalidVote() {
 
     BDDMockito.when(agendaRepository.findById(ArgumentMatchers.any()))
         .thenReturn(Optional.of(agendaMapper.toRedisAgenda(agenda)));

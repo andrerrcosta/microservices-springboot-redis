@@ -3,13 +3,15 @@ package com.nobblecrafts.learn.redis.admin.mapper;
 import com.nobblecrafts.learn.redis.admin.domain.Agenda;
 import com.nobblecrafts.learn.redis.admin.domain.Associate;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 
 public class MapperUtils {
 
     public Associate longToAssociateId(Long id) {
-        return  new Associate().withId(id);
+        return new Associate().withId(id);
     }
 
     public Agenda longToAgendaId(Long id) {
@@ -46,5 +48,10 @@ public class MapperUtils {
         return agenda.stream()
                 .map(Agenda::getId)
                 .collect(Collectors.toSet());
+    }
+
+    public Map<Long, String> agendaElementCollectionToDto(Map<Associate, String> map) {
+        return map.entrySet().stream()
+                .collect(Collectors.toMap(e -> e.getKey().getId(), e -> e.getValue()));
     }
 }

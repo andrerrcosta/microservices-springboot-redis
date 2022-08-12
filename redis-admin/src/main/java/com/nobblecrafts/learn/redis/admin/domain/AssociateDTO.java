@@ -1,8 +1,11 @@
 package com.nobblecrafts.learn.redis.admin.domain;
 
 import lombok.*;
+import org.hibernate.validator.constraints.br.CPF;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -12,11 +15,16 @@ import java.util.Set;
 @With
 @Getter
 @Setter
+@ToString
 public class AssociateDTO implements Serializable {
 
-    Long id;
-    String name;
-    Set<Long> agendas;
-    String cpf;
+    private Long id;
+    @NotNull
+    private String name;
+    @Builder.Default
+    private Set<Long> agendas = new HashSet<>();
+    @NotNull
+    @CPF
+    private String cpf;
 
 }

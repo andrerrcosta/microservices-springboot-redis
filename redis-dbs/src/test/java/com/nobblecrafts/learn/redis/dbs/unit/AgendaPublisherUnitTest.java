@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
-public class AgendaPublisherTest {
+class AgendaPublisherUnitTest {
 
   private AMQPPublisher publisher;
   private AgendaSupplier supplier = new AgendaSupplier();
@@ -31,12 +31,12 @@ public class AgendaPublisherTest {
   private AmqpTemplate template;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     publisher = new AgendaPublisher(template, "test.exchange", "test.key");
   }
 
   @Test
-  public void testPublisher() {
+  void testPublisher() {
     var agenda = supplier.createAgenda(1L, 0L);
     var votes = new HashMap<Long, String>();
     supplier.createRandomValidVotes(agenda.getAssociates(), agenda.getId())

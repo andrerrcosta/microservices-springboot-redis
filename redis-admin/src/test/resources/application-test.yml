@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: admin
+
+  jpa:
+    open-in-view: false
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        connection:
+          provider_disables_autocommit: true
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    password:
+    username: sa
+    schema: classpath:init-schema.sql
+    initialization-mode: always
+    hikari:
+      auto-commit: false
+
+logging:
+  level:
+    org:
+      springframework:
+        ampq:
+          rabbit:
+            core:
+              RabbitAdmin: DEBUG
+
+server:
+  port: 8081
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on-param
+
+amqp-config:
+  scheduler-exchange: scheduler-agenda
+  admin-exchange: admin-agenda
+  admin-queue: admin-queue
+  scheduler-routing-key: scheduler-key
+  admin-routing-key: admin-key

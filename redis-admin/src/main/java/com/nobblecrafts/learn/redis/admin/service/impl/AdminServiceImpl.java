@@ -11,7 +11,6 @@ import com.nobblecrafts.learn.redis.admin.repository.AgendaRepository;
 import com.nobblecrafts.learn.redis.admin.repository.AssociateRepository;
 import com.nobblecrafts.learn.redis.admin.service.AdminService;
 import com.nobblecrafts.learn.redis.message.AMQPPublisher;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class AdminServiceImpl implements AdminService {
 
@@ -29,10 +27,17 @@ public class AdminServiceImpl implements AdminService {
     private final AgendaMapper agendaMapper = AgendaMapper.INSTANCE;
     private final AssociateMapper associateMapper = AssociateMapper.INSTANCE;
 
+    public AdminServiceImpl(AgendaRepository repository, AssociateRepository associateRepository, AMQPPublisher publisher) {
+        this.repository = repository;
+        this.associateRepository = associateRepository;
+        this.publisher = publisher;
+    }
+
 
     @Transactional
     public AgendaDTO createNewAgenda(AgendaDTO dto) {
-        var model = this.repository.save(agendaMapper.toEntity(dto));
+        var afterMap = agendaMapper.toEntity(dto);
+        var model = this.repository.save(afterMap);
         if (model != null)
             publisher.publish(agendaMapper.toDTO(model));
         return agendaMapper.toDTO(model);
@@ -65,7 +70,10 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     public AssociateDTO addAssociate(AssociateDTO dto) {
-        return associateMapper.toDTO(associateRepository.save(associateMapper.toEntity(dto)));
+        var associate = associateMapper.toEntity(dto);
+        var saved = associateRepository.save(associate);
+        var output = associateMapper.toDTO(saved);
+        return output;
     }
 
     @Transactional
