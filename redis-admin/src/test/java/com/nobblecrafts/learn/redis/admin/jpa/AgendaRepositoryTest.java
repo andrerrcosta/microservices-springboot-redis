@@ -21,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
+
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @DisplayName("testando AgendaRepository")
@@ -35,6 +37,7 @@ public class AgendaRepositoryTest {
   private AgendaSupplier supplier = new AgendaSupplier();
 
   @Test
+  @Transactional
   public void A1_successfulAgendaSave() {
 
     Agenda agenda = supplier.createAgendaWithoutAssociates(null);
@@ -46,6 +49,7 @@ public class AgendaRepositoryTest {
   }
 
   @Test
+  @Transactional
   public void A2_successfulAgendaUpdade() {
     Agenda agenda = supplier.createAgendaWithoutAssociates(null);
 
@@ -57,6 +61,7 @@ public class AgendaRepositoryTest {
   }
 
   @Test
+  @Transactional
   public void A3_AgendaNotFoundByTitle() {
     Agenda a1 = supplier.createAgendaWithoutAssociates(null);
     Agenda a2 = supplier.createAgendaWithoutAssociates(null);
